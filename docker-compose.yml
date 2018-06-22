@@ -1,0 +1,35 @@
+version: "3.2"
+services:
+  postgres:
+    image: postgres:10.4-alpine
+    environment:
+      POSTGRES_USER: mobydock
+      POSTGRES_PASSWORD: yourpassword
+    ports:
+      - '5532:5432'
+    volumes:
+      - "hunt_database:/var/lib/postgresql/data"
+
+  redis:
+    image: redis:2.8.22
+    ports:
+      - '6379:6379'
+    volumes:
+      - "redis_data:/var/lib/redis/data"
+
+  hunt_app:
+    build: .
+    command: gunicorn -b 0.0.0.0:8000 --reload --access-logfile - "hunt_app.src.main.python.app:create_app()"
+    environment:
+      PYTHONUNBUFFERED: 'true'
+    links:
+      - postgres
+      - redis
+    volumes:
+      - .:/hunt_app
+    ports:
+      - '8000:8000'
+
+volumes:
+  hunt_database:
+  redis_data:
