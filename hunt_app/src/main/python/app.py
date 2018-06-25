@@ -1,18 +1,23 @@
 import logging
+from hunt_app.src.main.python.hunt_database import SolvedClue
+from hunt_app.src.main.python.hunt_database import Team
+from hunt_app.src.main.python.hunt_database import Clue
+from hunt_app.src.main.python.hunt_database import HuntDatabase
+from hunt_app.src.main.python import auth
 
 from flask import Blueprint, Flask, render_template, redirect, request, url_for
-from flask_sqlalchemy import SQLAlchemy
 from flask_redis import FlaskRedis
 from redis import StrictRedis
-from sqlalchemy.sql.expression import func
+
 
 stream_handler = logging.StreamHandler()
 stream_handler.setLevel(logging.INFO)
 
-db = SQLAlchemy()
 redis_store = FlaskRedis.from_custom_provider(StrictRedis)
 
 page = Blueprint('page', __name__)
+
+db = HuntDatabase()
 
 def create_app():
 
@@ -21,13 +26,18 @@ def create_app():
     app.config.from_object('hunt_app.src.main.python.config.settings')
     app.config.from_pyfile('settings.py', silent=True)
 
-    db.init_app(app)
     redis_store.init_app(app)
+    db.start_database(app)
 
     app.register_blueprint(page)
+    app.register_blueprint(auth.bp)
     app.logger.addHandler(stream_handler)
 
     return app
+
+
+def getDatabase():
+    return db
 
 
 @page.route('/')
@@ -37,6 +47,7 @@ def index():
         main_content = 'Feeding time'
     elif request.args.get('test_message'):
         main_content="Testing the main content insertion into the place."
+        feed_count = 0
     else:
         main_content = ''
         feed_count = redis_store.get('feed_count')
@@ -48,29 +59,7 @@ def index():
 
 @page.route('/seed')
 def seed():
-
-    db.drop_all()
-    db.create_all()
-
-    test_team = Team(name="Team America", captain="James Runswick", login_code="123login", completion_percentage=25)
-    db,session.add(test_team)
-    db,session.commit()
-
+    db.seed_database()
     return redirect(url_for('page.index'))
 
 
-class Team(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text())
-    captain = db.Column(db.Text())
-    login_code = db.Column(db.Text())
-    completion_percentage = db.Column(db.Integer)
-
-
-class Clue(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text())
-    location = db.Column(db.Text())
-    hint = db.Column(db.Text())
-    puzzle = db.Column(db.Text())
-    code_snippet = db.Column(db.Text())
