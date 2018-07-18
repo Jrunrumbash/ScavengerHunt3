@@ -19,7 +19,7 @@ services:
 
   hunt_app:
     build: .
-    command: gunicorn -b 0.0.0.0:8000 --reload --access-logfile - "hunt_app.src.main.python.app:create_app()"
+    command: gunicorn -b 0.0.0.0:8000 --reload --access-logfile - "app:create_app()"
     environment:
       PYTHONUNBUFFERED: 'true'
     links:

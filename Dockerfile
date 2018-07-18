@@ -17,4 +17,4 @@ COPY . .
 VOLUME /hunt_app
 
 
-CMD gunicorn -b 0.0.0.0:8000 "hunt_app.src.main.python.app:create_app()"
+CMD gunicorn -b 0.0.0.0:8000 "app:create_app()"

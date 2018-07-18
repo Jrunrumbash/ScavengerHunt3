@@ -1,33 +1,66 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<link rel="canonical" href="https://weather-pwa-sample.firebaseapp.com/final/">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Weather PWA</title>
-		<link rel="stylesheet" type="text/css" href="styles/main.css">
-		<link rel="manifest" href="/manifest.json">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="canonical" href="https://weather-pwa-sample.firebaseapp.com/final/">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Weather PWA</title>
+	<link rel="manifest" href="/manifest.json">
 
-		<!-- Add to home screen for Safari on iOS -->
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="apple-mobile-web-app-title" content="Weather PWA">
-		<link rel="apple-touch-icon" href="images/icons/icon-152x152.png">
+	<!-- Add to home screen for Safari on iOS -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-title" content="Weather PWA">
+	<link rel="apple-touch-icon" href="images/icons/icon-152x152.png">
 
-		<!-- windows machines -->
-		<meta name="msapplication-TileImage" content="images/icons/icon-144x144.png">
-		<meta name="msapplication-TileColor" content="#2F3BA2">
+	<!-- windows machines -->
+	<meta name="msapplication-TileImage" content="images/icons/icon-144x144.png">
+	<meta name="msapplication-TileColor" content="#2F3BA2">
 
-		<title>Techday Scavenger Hunt</title>
-	</head>
-	<body>
-		<div id="command_menu">
-			<p>Time to begin ...</p>
-			<div class="command">
-				<a href="#" target="_blank">Command 1</a>
-			</div>
-			
-		</div>
-	</body>
+	<!--styles-->
+	<link rel="stylesheet" href="./styles/jquery.mobile-1.4.5.min.css">
+	<!--<link rel="stylesheet" type="text/css" href="styles/main.css">-->
+	<!--scripts-->
+	<script src="./scripts/jquery.min.js"></script>
+	<script src="./scripts/jquery.mobile-1.4.5.min.js"></script>
+
+
+	<title>Techday Scavenger Hunt</title>
+</head>
+<body>
+<div data-role="page" id="main_menu">
+	<div data-role="header">Main Menu</div>
+	<div data-role="main"> <p><a href="#register">Register here</a></p></div>
+	<div data-role="footer"></div>
+</div>
+<div data-role="page" id="file_directory">
+	<div data-role="header">Test</div>
+	<div data-role="footer"></div>
+</div>
+<div data-role="page" id="register">
+	<div data-role="header">
+		<form action="http://127.0.0.1:8000/login" method="post">
+			<input type="text" value="team_name" name="team_name">
+			<input type="password" value="password" name="password">
+			<input type="submit" value="submit" >
+		</form>
+	</div>
+	<div data-role="main" class="ui-content">
+
+		<form action="http://127.0.0.1:8000/addTeam" method="post">
+			<input type="text" name="team_name">
+			<input type="text" name="captain">
+			<input type="password" name="password">
+			<input type="submit" value="submit" >
+		</form>
+	</div>
+
+	<div data-role="footer"></div>
+</div>
+<div data-role="page" id="leaderboard">
+	<div data-role="header"></div>
+	<div data-role="footer"></div>
+</div>
+</body>
 </html>
